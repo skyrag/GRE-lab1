@@ -4,5 +4,5 @@ module ch.heig.gre {
   requires javafx.graphics;
 
   opens ch.heig.gre.gui to javafx.fxml;
-  opens ch.heig.gre.groupX to javafx.graphics;
+  opens ch.heig.gre.groupF to javafx.graphics;
 }

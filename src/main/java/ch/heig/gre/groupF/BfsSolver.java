@@ -11,37 +11,36 @@ public final class BfsSolver implements MazeSolver {
   @Override
   public List<Integer> solve(Graph graph, int source, int destination, VertexLabelling<Integer> treatments) {
     Queue<Integer> queue = new LinkedList<>();
-    Map<Integer, Integer> parent = new HashMap<>();
+    Map<Integer, Integer> parent = new HashMap<>(); // store the parent and the current cell
     treatments.setLabel(source, 0);
-    parent.put(source, null);
+    parent.put(source, null); // the source has no parent
     queue.add(source);
 
     while (!queue.isEmpty()) {
 
       int current = queue.poll();
       if (current == destination) {
-        return getPath(destination, parent);
+        List<Integer> path = new ArrayList<>();
+
+        //creates the path from our map
+        for (Integer at = destination; at != null; at = parent.get(at)) {
+          path.add(at);
+        }
+
+        //reverses our list so that we begin from our source
+        Collections.reverse(path);
+        return path;
       }
 
       for ( int i : graph.neighbors(current)) {
         if (!parent.containsKey(i)) {
           queue.add(i);
-          parent.put(i, current);
-          treatments.setLabel(i, treatments.getLabel(current) + 1);
+          parent.put(i, current); // store in map to know the path back to the source
+          treatments.setLabel(i, treatments.getLabel(current) + 1); // increases the label which increases with the distance form source
         }
       }
     }
     return Collections.emptyList();
-  }
-
-
-  private List<Integer> getPath(int destination, Map<Integer, Integer> parent) {
-    List<Integer> path = new ArrayList<>();
-    for (Integer at = destination; at != null; at = parent.get(at)) {
-      path.add(at);
-    }
-    Collections.reverse(path);
-    return path;
   }
 }
 
